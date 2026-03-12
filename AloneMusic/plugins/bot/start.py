@@ -1,23 +1,18 @@
 import random
 import time
 
-from youtubesearchpython.__future__ import VideosSearch
 from pyrogram import filters
 from pyrogram.enums import ChatType
 from pyrogram.types import InlineKeyboardButton, InlineKeyboardMarkup, Message
+from youtubesearchpython.__future__ import VideosSearch
 
 import config
 from AloneMusic import app
 from AloneMusic.misc import _boot_
 from AloneMusic.plugins.sudo.sudoers import sudoers_list
-from AloneMusic.utils.database import (
-    add_served_chat,
-    add_served_user,
-    blacklisted_chats,
-    get_lang,
-    is_banned_user,
-    is_on_off,
-)
+from AloneMusic.utils.database import (add_served_chat, add_served_user,
+                                       blacklisted_chats, get_lang,
+                                       is_banned_user, is_on_off)
 from AloneMusic.utils.decorators.language import LanguageStart
 from AloneMusic.utils.formatters import get_readable_time
 from AloneMusic.utils.inline import help_pannel, private_panel, start_panel
@@ -36,37 +31,36 @@ EFFECT_ID = [
 
 # 🌄 Random Start Images
 Kanha = [
-
-      "https://te.legra.ph/file/d373ae93502a5ae7fd403.png", 
-      "https://te.legra.ph/file/fd9cc86239dd76d564d01.png", 
-      "https://te.legra.ph/file/35177bbb5d5f07ad8e394.png", 
-      "https://te.legra.ph/file/74a8ba5270d0e27ac045c.png", 
-      "https://te.legra.ph/file/a3a874be5095d9af685ac.png",
-      "https://te.legra.ph/file/7757731c3e8b784b6a550.png",
-      "https://te.legra.ph/file/58c34981e21180989887c.png", 
-      "https://te.legra.ph/file/ac461a1889255424420ff.png", 
-      "https://te.legra.ph/file/c0d0ee1452cbbbce116f4.png", 
-      "https://te.legra.ph/file/ab243bcad20965f637b5c.png", 
-      "https://te.legra.ph/file/c12a0b77178e2d2e27a50.png", 
-      "https://te.legra.ph/file/700af8c3ee786a20aff35.png", 
-      "https://te.legra.ph/file/cbecd8af0446a422a95ca.png", 
-      "https://te.legra.ph/file/c3a0fde4abde25dd25e26.png", 
-      "https://te.legra.ph/file/7be8c2f9e093f695c4c6e.png",
-      "https://te.legra.ph/file/ee10888e828bae3a6a0fc.png", 
-      "https://te.legra.ph/file/1b55fe681163188149fa4.png", 
-      "https://te.legra.ph/file/30ee4e96f64cd9abb69b6.png",
-      "https://te.legra.ph/file/30b121ce5fa87360692ba.png",
-      "https://te.legra.ph/file/f0617cc52008bd78f1a9d.png", 
-      "https://te.legra.ph/file/1cd1adc3eb9ac0a101610.png", 
-      "https://te.legra.ph/file/860c3dd149f91eb450d5a.png", 
-      "https://te.legra.ph/file/2e9df77f8100e0327ba52.png",
-      "https://te.legra.ph/file/639efe98c133d71c418db.png", 
-      "https://te.legra.ph/file/8a834586b677739b86bff.png",
-      "https://te.legra.ph/file/13f79674ce777f43871fb.png",
-      "https://te.legra.ph/file/147157eca055a1e2c8756.png",
-      "https://te.legra.ph/file/b774a8da74dc954afebc6.png", 
-     "https://te.legra.ph/file/7ae4a6a6a6c28f9f08ceb.png",
-      "https://te.legra.ph/file/12d5ea64ed00416a38ec8.png"
+    "https://te.legra.ph/file/d373ae93502a5ae7fd403.png",
+    "https://te.legra.ph/file/fd9cc86239dd76d564d01.png",
+    "https://te.legra.ph/file/35177bbb5d5f07ad8e394.png",
+    "https://te.legra.ph/file/74a8ba5270d0e27ac045c.png",
+    "https://te.legra.ph/file/a3a874be5095d9af685ac.png",
+    "https://te.legra.ph/file/7757731c3e8b784b6a550.png",
+    "https://te.legra.ph/file/58c34981e21180989887c.png",
+    "https://te.legra.ph/file/ac461a1889255424420ff.png",
+    "https://te.legra.ph/file/c0d0ee1452cbbbce116f4.png",
+    "https://te.legra.ph/file/ab243bcad20965f637b5c.png",
+    "https://te.legra.ph/file/c12a0b77178e2d2e27a50.png",
+    "https://te.legra.ph/file/700af8c3ee786a20aff35.png",
+    "https://te.legra.ph/file/cbecd8af0446a422a95ca.png",
+    "https://te.legra.ph/file/c3a0fde4abde25dd25e26.png",
+    "https://te.legra.ph/file/7be8c2f9e093f695c4c6e.png",
+    "https://te.legra.ph/file/ee10888e828bae3a6a0fc.png",
+    "https://te.legra.ph/file/1b55fe681163188149fa4.png",
+    "https://te.legra.ph/file/30ee4e96f64cd9abb69b6.png",
+    "https://te.legra.ph/file/30b121ce5fa87360692ba.png",
+    "https://te.legra.ph/file/f0617cc52008bd78f1a9d.png",
+    "https://te.legra.ph/file/1cd1adc3eb9ac0a101610.png",
+    "https://te.legra.ph/file/860c3dd149f91eb450d5a.png",
+    "https://te.legra.ph/file/2e9df77f8100e0327ba52.png",
+    "https://te.legra.ph/file/639efe98c133d71c418db.png",
+    "https://te.legra.ph/file/8a834586b677739b86bff.png",
+    "https://te.legra.ph/file/13f79674ce777f43871fb.png",
+    "https://te.legra.ph/file/147157eca055a1e2c8756.png",
+    "https://te.legra.ph/file/b774a8da74dc954afebc6.png",
+    "https://te.legra.ph/file/7ae4a6a6a6c28f9f08ceb.png",
+    "https://te.legra.ph/file/12d5ea64ed00416a38ec8.png",
 ]
 
 
@@ -91,7 +85,7 @@ async def start_pm(client, message: Message, _):
         if name.startswith("help"):
             keyboard = help_pannel(_)
             return await message.reply_photo(
-                        photo=random.choice(Kanha),  # ✅ RANDOM IMAGE FIXED
+                photo=random.choice(Kanha),  # ✅ RANDOM IMAGE FIXED
                 caption=_["help_1"].format(config.SUPPORT_CHAT),
                 reply_markup=keyboard,
             )
@@ -103,8 +97,8 @@ async def start_pm(client, message: Message, _):
                 await app.send_message(
                     chat_id=config.LOGGER_ID,
                     text=f"{message.from_user.mention} checked <b>sudolist</b>\n\n"
-                         f"<b>ID:</b> <code>{message.from_user.id}</code>\n"
-                         f"<b>User:</b> @{message.from_user.username}",
+                    f"<b>ID:</b> <code>{message.from_user.id}</code>\n"
+                    f"<b>User:</b> @{message.from_user.username}",
                 )
             return
 
@@ -152,8 +146,8 @@ async def start_pm(client, message: Message, _):
                 await app.send_message(
                     chat_id=config.LOGGER_ID,
                     text=f"{message.from_user.mention} checked track info\n\n"
-                         f"<b>ID:</b> <code>{message.from_user.id}</code>\n"
-                         f"<b>User:</b> @{message.from_user.username}",
+                    f"<b>ID:</b> <code>{message.from_user.id}</code>\n"
+                    f"<b>User:</b> @{message.from_user.username}",
                 )
             return
 
@@ -172,8 +166,8 @@ async def start_pm(client, message: Message, _):
         await app.send_message(
             chat_id=config.LOGGER_ID,
             text=f"{message.from_user.mention} started bot\n\n"
-                 f"<b>ID:</b> <code>{message.from_user.id}</code>\n"
-                 f"<b>User:</b> @{message.from_user.username}",
+            f"<b>ID:</b> <code>{message.from_user.id}</code>\n"
+            f"<b>User:</b> @{message.from_user.username}",
         )
 
 
